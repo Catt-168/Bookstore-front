@@ -63,9 +63,12 @@ const UploadBook = () => {
       author_id: Number(selectedAuthor),
       publisher_id: Number(selectedPublisher),
     };
-
-    const res = await restClient.post(`${SERVER}/books`, request);
-    console.log("res", res);
+    try {
+      const res = await restClient.post(`${SERVER}/books`, request);
+      alert("Book Successfully Created");
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   };
 
   return (

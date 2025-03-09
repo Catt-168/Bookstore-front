@@ -87,6 +87,7 @@ const EditBook = () => {
       request
     );
     // Success
+    alert("Book Successfully Updated");
   };
 
   return (

@@ -7,6 +7,7 @@ const PurchaseHistory = () => {
   const [books, setBooks] = useState([]);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
+  const [allOrders, setAllOrders] = useState([]);
   const booksPerPage = 8;
 
   const totalPages = Math.ceil(books.length / booksPerPage);
@@ -42,6 +43,11 @@ const PurchaseHistory = () => {
       const { data: res } = await restClient.get(
         `${SERVER}/orders/byCustomer?customerId=${customerId}`
       );
+      setAllOrders(
+        res.flatMap((order) =>
+          Array(Math.max(order.books.length, 1)).fill(order.orderStatus)
+        )
+      );
 
       setBooks(res.flatMap((item) => item.books));
     } catch (e) {
@@ -59,7 +65,7 @@ const PurchaseHistory = () => {
         Books you have purchased
       </h2>
       <div className="grid grid-cols-4 gap-6">
-        {currentBooks.map((book) => (
+        {currentBooks.map((book, index) => (
           <div
             onClick={() => navigate(`../../book/${book.id}`, { state: book })}
             key={book.id}
@@ -76,6 +82,17 @@ const PurchaseHistory = () => {
               </h3>
               <p className="text-gray-600">{book.author.name}</p>
               <p className="text-gray-800 font-bold mt-2">{book.price}</p>
+              <p
+                className={`font-bold mt-2 ${
+                  allOrders[index] === "PENDING"
+                    ? "text-yellow-500"
+                    : allOrders[index] === "DELIVERED"
+                    ? "text-green-500"
+                    : "text-gray-800"
+                }`}
+              >
+                {allOrders[index]}
+              </p>
             </div>
           </div>
         ))}

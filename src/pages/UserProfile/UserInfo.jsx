@@ -27,7 +27,7 @@ const UserInfo = () => {
         customerAddress: formData.address,
         customerPhone: formData.phoneNumber,
       });
-      console.log("RES", res);
+      alert("SUCCESSFULLY UPDATED CUSTOMER ", formData.name);
     } catch (e) {
       console.log("ERROR", e);
     }

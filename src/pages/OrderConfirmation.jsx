@@ -39,10 +39,8 @@ const OrderConfirmation = () => {
       const { data } = await restClient.post(`${SERVER}/orders`, payload);
       console.log("data", data);
       console.log("Order confirmed!");
+      navigate("/thankyou");
       clearCart();
-      setTimeout(() => {
-        navigate("/thankyou");
-      }, 1000);
     } catch (e) {
       console.log("ERROR", e);
     }

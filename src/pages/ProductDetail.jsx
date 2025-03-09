@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
-import Navbar from "../components/navbar/Navbar";
-import restClient from "../components/constants/restClient";
 import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Navbar from "../components/navbar/Navbar";
 import { CartContext } from "../context/CartContext";
 
 const ProductDetail = () => {
   // const { bookId } = useParams();
   const location = useLocation();
+
   const { book } = location.state;
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useContext(CartContext);
@@ -201,13 +201,21 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* <div className="mt-12">
+        <div className="mt-12">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             Books You May Also Like
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {recommedation.slice(0, 4).map((book, index) => (
               <div
+                onClick={() => {
+                  window.open(
+                    `https://www.google.com/search?q=${encodeURIComponent(
+                      book.title
+                    )}`,
+                    "_blank"
+                  );
+                }}
                 key={index}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
               >
@@ -238,7 +246,7 @@ const ProductDetail = () => {
               </div>
             ))}
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

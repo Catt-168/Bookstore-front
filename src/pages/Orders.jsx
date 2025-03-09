@@ -280,12 +280,12 @@ const Orders = () => {
               books will be delivered!
             </p>
             <div className="flex justify-around space-x-4">
-              <button
+              {/* <button
                 onClick={() => handleCancelOrder(selectedOrderId)}
                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
               >
                 Cancel Order
-              </button>
+              </button> */}
               <button
                 onClick={() => handleStatusChange(selectedOrderId, "DELIVERED")}
                 className="bg-[#0b7312] text-white px-4 py-2 rounded-md hover:bg-[#437747]"

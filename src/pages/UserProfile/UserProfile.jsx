@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { FaHistory, FaUser } from "react-icons/fa";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { FaUser, FaHistory } from "react-icons/fa";
-import restClient, { SERVER } from "../../components/constants/restClient";
 
 const UserProfile = () => {
   const navigate = useNavigate();

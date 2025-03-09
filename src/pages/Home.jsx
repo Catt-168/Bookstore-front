@@ -317,45 +317,15 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../components/navbar/Navbar";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext.jsx";
 import restClient, { SERVER } from "../components/constants/restClient.jsx";
 
 const Home = () => {
   const { addToCart } = useContext(CartContext);
   const username = JSON.parse(localStorage.getItem("username") || "");
-
-  // Example book data
-  const books = [
-    {
-      id: "1",
-      title: "The Shawshank Redemption",
-      author: "Stephan King",
-      price: "47000 MMK",
-      image: "/book2.png",
-    },
-    {
-      id: "2",
-      title: "Harry Potter and The Goblet of Fire",
-      author: "J.K. Rowling",
-      price: "47000 MMK",
-      image: "/book2.png",
-    },
-    {
-      id: "3",
-      title: "A Song Of Ice And Fire",
-      author: "George R.R. Martin",
-      price: "47000 MMK",
-      image: "/book3.png",
-    },
-    {
-      id: "4",
-      title: "River Sing Me Home",
-      author: "George R.R. Martin",
-      price: "47000 MMK",
-      image: "/book4.png",
-    },
-  ];
+  const [editorPick, setEditorPick] = useState([]);
+  const navigate = useNavigate();
 
   // State for managing the modal
   const [selectedBook, setSelectedBook] = useState(null); // Book selected for adding to cart
@@ -364,7 +334,7 @@ const Home = () => {
   // Open modal and set the selected book
   const openModal = (book) => {
     setSelectedBook(book);
-    setQuantity(1); // Reset quantity to 1 when modal opens
+    handleAddToCart();
   };
 
   // Close modal
@@ -373,11 +343,9 @@ const Home = () => {
   };
 
   // Handle Add to Cart button click in the modal
-  const handleAddToCart = () => {
-    if (selectedBook) {
-      addToCart(selectedBook, quantity); // Add the selected book with the chosen quantity
-      closeModal(); // Close the modal after adding to cart
-    }
+  const handleAddToCart = (book) => {
+    addToCart(book, quantity); // Add the selected book with the chosen quantity
+    // closeModal(); // Close the modal after adding to cart
   };
 
   // Handle quantity increase
@@ -396,8 +364,18 @@ const Home = () => {
     const { data } = await restClient.get(
       `${SERVER}/customers/getCustomer?username=${username}`
     );
-    const sss = data.favGenre.split(",").map(Number);
-    await restClient.get(`${SERVER}/books/editor-pick`, { ids: sss });
+    console.log("FAVG", data.favGenre);
+    const selectedGenre = data.favGenre.split(",").map(Number);
+
+    try {
+      console.log("selectedGenre", selectedGenre);
+      const res = await restClient.post(`${SERVER}/books/editor-pick`, {
+        genre_id: selectedGenre,
+      });
+      setEditorPick(res.data);
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   }
 
   useEffect(() => {
@@ -442,16 +420,19 @@ const Home = () => {
         {/* Recommended For You Section */}
         <div className="container mx-auto py-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 font-['Roboto_Serif']">
-            Recommended For You
+            Editor Pick for you
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {books.map((book) => (
+            {editorPick.map((book) => (
               <div
+                onClick={() =>
+                  navigate(`/book/${book.id}`, { state: { book } })
+                }
                 key={book.id}
                 className="bg-white shadow-md rounded-lg overflow-hidden"
               >
                 <img
-                  src={book.image}
+                  src={book.image_url}
                   alt={book.title}
                   className="w-full h-[375px] object-cover"
                 />
@@ -459,10 +440,10 @@ const Home = () => {
                   <h3 className="font-bold text-lg text-gray-800 whitespace-nowrap overflow-hidden text-ellipsis">
                     {book.title}
                   </h3>
-                  <p className="text-gray-600">{book.author}</p>
+                  <p className="text-gray-600">{book.author.name}</p>
                   <p className="text-gray-800 font-bold mt-2">{book.price}</p>
                   <button
-                    onClick={() => openModal(book)}
+                    onClick={() => handleAddToCart(book)}
                     className="mt-4 w-full px-4 py-2 bg-custom-orange text-white font-semibold rounded-md hover:bg-[#D96C4A] transition-colors"
                   >
                     Add to Cart
