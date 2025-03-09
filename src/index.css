@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme{
+  --color-custom-orange: #E97B58;
+  --color-hover-orange: #D96C4A;
+  --color-custom-metallic: #474343;
+  --font-inter: "Inter", sans-serif;
+  --font-roboto: "Roboto Serif", serif;
+  --shadow-custom: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+  width: 80%;
+  margin: auto;
+
+
+}
+
+.navbar{
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.main-content{
+  display: flex;
+  flex-direction: column;
+  width: 100%
+}
+
+.backdrop-blur{
+  backdrop-filter: blur(2px);
+}
